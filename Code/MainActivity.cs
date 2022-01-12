@@ -3,6 +3,7 @@ using Android.Content;
 using Android.Content.PM;
 using Android.Content.Res;
 using Android.Graphics.Drawables;
+using Android.Media;
 using Android.OS;
 using Android.Text;
 using Android.Text.Style;
@@ -23,17 +24,22 @@ namespace RadioPlayer.Code
     public class MainActivity : AppCompatActivity
     {
         private int notificationId = 0;
-        private string notificationChannel = null;
-
+        private string notificationChannel;
         private int controlId = 0;
-        private Intent radioService = null;
         private SemaphoreSlim semaphore = new SemaphoreSlim(1, 1);
+
+        private SeekBar audioSlider;
+        private AudioManager audioManager;
+        private Intent radioService;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             Platform.Init(this, savedInstanceState);
             SetContentView(Resource.Layout.activity_main);
+
+            audioSlider = FindViewById<SeekBar>(Resource.Id.audio_slider);
+            audioManager = (AudioManager)GetSystemService(AudioService);
 
             var toolbar = FindViewById<AndroidX.AppCompat.Widget.Toolbar>(Resource.Id.toolbar);
             SetSupportActionBar(toolbar);
@@ -42,6 +48,27 @@ namespace RadioPlayer.Code
 
             CreateNotificationChannel();
             LoadButtons();
+        }
+
+        protected override void OnResume()
+        {
+            base.OnResume();
+
+            audioSlider.Max = audioManager.GetStreamMaxVolume(Stream.Music);
+            audioSlider.Progress = audioManager.GetStreamVolume(Stream.Music);
+            audioSlider.ProgressChanged += AudioSlider_ProgressChanged;
+        }
+
+        protected override void OnPause()
+        {
+            base.OnPause();
+
+            audioSlider.ProgressChanged -= AudioSlider_ProgressChanged;
+        }
+
+        private void AudioSlider_ProgressChanged(object sender, SeekBar.ProgressChangedEventArgs e)
+        {
+            audioManager.SetStreamVolume(Stream.Music, e.Progress, 0);
         }
 
         private void CreateRadioLayout(string text, Func<Task<string>> urlCallback)
@@ -219,7 +246,7 @@ namespace RadioPlayer.Code
             {
                 case Resource.Id.action_about:
                     {
-                        ShowDialog("About", "RadioPlayer v1.0 by depler.\nAll rights is not reserved.\nCopyleft ® 2021.");
+                        ShowDialog("About", "RadioPlayer v1.1 by depler.\nAll rights is not reserved.\nCopyleft ® 2022.");
                         return true;
                     }
                 default: return base.OnOptionsItemSelected(item);
