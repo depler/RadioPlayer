@@ -23,14 +23,14 @@ namespace RadioPlayer.Code
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = true, LaunchMode = LaunchMode.SingleTop)]
     public class MainActivity : AppCompatActivity
     {
-        private int notificationId = 0;
-        private string notificationChannel;
-        private int controlId = 0;
-        private SemaphoreSlim semaphore = new SemaphoreSlim(1, 1);
+        private int _notificationId = 0;
+        private string _notificationChannel;
+        private int _controlId = 0;
+        private SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
 
-        private SeekBar audioSlider;
-        private AudioManager audioManager;
-        private Intent radioService;
+        private SeekBar _audioSlider;
+        private AudioManager _audioManager;
+        private Intent _radioService;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -38,13 +38,13 @@ namespace RadioPlayer.Code
             Platform.Init(this, savedInstanceState);
             SetContentView(Resource.Layout.activity_main);
 
-            audioSlider = FindViewById<SeekBar>(Resource.Id.audio_slider);
-            audioManager = (AudioManager)GetSystemService(AudioService);
+            _audioSlider = FindViewById<SeekBar>(Resource.Id.audio_slider);
+            _audioManager = (AudioManager)GetSystemService(AudioService);
 
             var toolbar = FindViewById<AndroidX.AppCompat.Widget.Toolbar>(Resource.Id.toolbar);
             SetSupportActionBar(toolbar);
 
-            radioService = new Intent(this, typeof(RadioService));
+            _radioService = new Intent(this, typeof(RadioService));
 
             CreateNotificationChannel();
             LoadButtons();
@@ -54,21 +54,21 @@ namespace RadioPlayer.Code
         {
             base.OnResume();
 
-            audioSlider.Max = audioManager.GetStreamMaxVolume(Stream.Music);
-            audioSlider.Progress = audioManager.GetStreamVolume(Stream.Music);
-            audioSlider.ProgressChanged += AudioSlider_ProgressChanged;
+            _audioSlider.Max = _audioManager.GetStreamMaxVolume(Stream.Music);
+            _audioSlider.Progress = _audioManager.GetStreamVolume(Stream.Music);
+            _audioSlider.ProgressChanged += AudioSlider_ProgressChanged;
         }
 
         protected override void OnPause()
         {
             base.OnPause();
 
-            audioSlider.ProgressChanged -= AudioSlider_ProgressChanged;
+            _audioSlider.ProgressChanged -= AudioSlider_ProgressChanged;
         }
 
         private void AudioSlider_ProgressChanged(object sender, SeekBar.ProgressChangedEventArgs e)
         {
-            audioManager.SetStreamVolume(Stream.Music, e.Progress, 0);
+            _audioManager.SetStreamVolume(Stream.Music, e.Progress, 0);
         }
 
         private void CreateRadioLayout(string text, Func<Task<string>> urlCallback)
@@ -77,13 +77,13 @@ namespace RadioPlayer.Code
             var layout = (LinearLayout)LayoutInflater.From(this).Inflate(Resource.Layout.content_radio, null);
 
             var button = (RadioMaterialButton)layout.GetChildAt(0);
-            button.Id = ++controlId;
+            button.Id = ++_controlId;
             button.Icon = GetPlayerIcon(RadioService.Id == button.Id ? false : true);
             button.GetRadioUrlAsync = urlCallback;
             button.Click += (s, e) => ButtonRadioClick(button, text);
 
             var tv = (TextView)layout.GetChildAt(1);
-            tv.Id = ++controlId;
+            tv.Id = ++_controlId;
             tv.Text = text;
 
             content.AddView(layout);
@@ -116,11 +116,11 @@ namespace RadioPlayer.Code
 
         private void CreateNotificationChannel()
         {
-            notificationChannel = Resources.GetString(Resource.String.app_name);
+            _notificationChannel = Resources.GetString(Resource.String.app_name);
 
             if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
             {
-                var channel = new NotificationChannel(notificationChannel, notificationChannel, NotificationImportance.Default);
+                var channel = new NotificationChannel(_notificationChannel, _notificationChannel, NotificationImportance.Default);
                 var manager = (NotificationManager)GetSystemService(NotificationService);
                 manager.CreateNotificationChannel(channel);
             }
@@ -131,7 +131,7 @@ namespace RadioPlayer.Code
             var intent = new Intent(this, typeof(MainActivity));
             var pendingIntent = PendingIntent.GetActivity(ApplicationContext, 0, intent, PendingIntentFlags.UpdateCurrent);
 
-            var builder = new NotificationCompat.Builder(this, notificationChannel)
+            var builder = new NotificationCompat.Builder(this, _notificationChannel)
                 .SetContentText(text)
                 .SetContentIntent(pendingIntent)
                 .SetVisibility((int)NotificationVisibility.Public)
@@ -141,13 +141,13 @@ namespace RadioPlayer.Code
                 .SetShowWhen(false);
 
             var notificationManager = NotificationManagerCompat.From(this);
-            notificationManager.Notify(notificationId, builder.Build());
+            notificationManager.Notify(_notificationId, builder.Build());
         }
 
         private void HideNotification()
         {
             var notificationManager = NotificationManagerCompat.From(this);
-            notificationManager.Cancel(notificationId);
+            notificationManager.Cancel(_notificationId);
         }
 
         private void ShowDialog(string title, string message)
@@ -190,7 +190,7 @@ namespace RadioPlayer.Code
             await player.StartAsync();
 
             RadioService.SetPlayer(player, button.Id);
-            StartService(radioService);
+            StartService(_radioService);
 
             button.Icon = GetPlayerIcon(false);
             ShowNotification(notification);
@@ -199,7 +199,7 @@ namespace RadioPlayer.Code
         private void StopRadio()
         {
             RadioService.SetPlayer(null, -1);
-            StopService(radioService);
+            StopService(_radioService);
 
             ResetButtons();
             HideNotification();
@@ -207,7 +207,7 @@ namespace RadioPlayer.Code
 
         private async void ButtonRadioClick(RadioMaterialButton button, string name)
         {
-            await semaphore.WaitAsync();
+            await _semaphore.WaitAsync();
             var progress = ShowProgress("Working on it...");
 
             try
@@ -230,7 +230,7 @@ namespace RadioPlayer.Code
             finally
             {
                 progress.Hide();
-                semaphore.Release();
+                _semaphore.Release();
             }
         }
 

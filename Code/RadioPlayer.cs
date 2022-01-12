@@ -11,36 +11,36 @@ namespace RadioPlayer.Code
 {
     public class RadioPlayer: IDisposable
     {
-        private string sourceUrl = null;
-        private SimpleExoPlayer exoPlayer = null;
+        private readonly string _sourceUrl;
+        private readonly SimpleExoPlayer _exoPlayer;
 
-        public bool IsPlaying => exoPlayer.IsPlaying;
+        public bool IsPlaying => _exoPlayer.IsPlaying;
 
         public RadioPlayer(Context context, string url)
         {
-            sourceUrl = url;
+            _sourceUrl = url;
 
 #pragma warning disable 612, 618
             var agent = WebSettings.GetDefaultUserAgent(context);
             var factory = new DefaultDataSourceFactory(context, agent);
             var extractorMediaSource = new ExtractorMediaSource(Android.Net.Uri.Parse(url), factory, new DefaultExtractorsFactory(), null, null);
 
-            exoPlayer = ExoPlayerFactory.NewSimpleInstance(context);            
-            exoPlayer.Prepare(extractorMediaSource);
+            _exoPlayer = ExoPlayerFactory.NewSimpleInstance(context);            
+            _exoPlayer.Prepare(extractorMediaSource);
 #pragma warning restore 612, 618
         }
 
         public async Task StartAsync()
         {
-            exoPlayer.PlayWhenReady = true;
+            _exoPlayer.PlayWhenReady = true;
 
             while (true)
             {
-                if (exoPlayer.IsPlaying)
+                if (_exoPlayer.IsPlaying)
                     return;
 
-                if (exoPlayer.PlaybackError != null)
-                    throw new Exception($"Cannot play source url: {sourceUrl}");
+                if (_exoPlayer.PlaybackError != null)
+                    throw new Exception($"Cannot play source url: {_sourceUrl}");
 
                 await Task.Delay(100);
             }            
@@ -48,8 +48,8 @@ namespace RadioPlayer.Code
 
         public void Dispose()
         {
-            exoPlayer.PlayWhenReady = false;
-            exoPlayer.Dispose();
+            _exoPlayer.PlayWhenReady = false;
+            _exoPlayer.Dispose();
         }
     }
 }
