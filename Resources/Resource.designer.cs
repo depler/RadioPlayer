@@ -2397,28 +2397,37 @@ namespace RadioPlayer
 			public const int secondary_text_disabled_material_light = 2131034244;
 			
 			// aapt resource value: 0x7F050085
-			public const int switch_thumb_disabled_material_dark = 2131034245;
+			public const int seek_bar_background = 2131034245;
 			
 			// aapt resource value: 0x7F050086
-			public const int switch_thumb_disabled_material_light = 2131034246;
+			public const int seek_bar_progress = 2131034246;
 			
 			// aapt resource value: 0x7F050087
-			public const int switch_thumb_material_dark = 2131034247;
+			public const int seek_bar_secondary_progress = 2131034247;
 			
 			// aapt resource value: 0x7F050088
-			public const int switch_thumb_material_light = 2131034248;
+			public const int switch_thumb_disabled_material_dark = 2131034248;
 			
 			// aapt resource value: 0x7F050089
-			public const int switch_thumb_normal_material_dark = 2131034249;
+			public const int switch_thumb_disabled_material_light = 2131034249;
 			
 			// aapt resource value: 0x7F05008A
-			public const int switch_thumb_normal_material_light = 2131034250;
+			public const int switch_thumb_material_dark = 2131034250;
 			
 			// aapt resource value: 0x7F05008B
-			public const int tooltip_background_dark = 2131034251;
+			public const int switch_thumb_material_light = 2131034251;
 			
 			// aapt resource value: 0x7F05008C
-			public const int tooltip_background_light = 2131034252;
+			public const int switch_thumb_normal_material_dark = 2131034252;
+			
+			// aapt resource value: 0x7F05008D
+			public const int switch_thumb_normal_material_light = 2131034253;
+			
+			// aapt resource value: 0x7F05008E
+			public const int tooltip_background_dark = 2131034254;
+			
+			// aapt resource value: 0x7F05008F
+			public const int tooltip_background_light = 2131034255;
 			
 			static Color()
 			{
@@ -3082,40 +3091,46 @@ namespace RadioPlayer
 			public const int notification_top_pad_large_text = 2131099863;
 			
 			// aapt resource value: 0x7F0600D8
-			public const int subtitle_corner_radius = 2131099864;
+			public const int seek_bar_thickness = 2131099864;
 			
 			// aapt resource value: 0x7F0600D9
-			public const int subtitle_outline_width = 2131099865;
+			public const int seek_bar_thumb_size = 2131099865;
 			
 			// aapt resource value: 0x7F0600DA
-			public const int subtitle_shadow_offset = 2131099866;
+			public const int subtitle_corner_radius = 2131099866;
 			
 			// aapt resource value: 0x7F0600DB
-			public const int subtitle_shadow_radius = 2131099867;
+			public const int subtitle_outline_width = 2131099867;
 			
 			// aapt resource value: 0x7F0600DC
-			public const int tooltip_corner_radius = 2131099868;
+			public const int subtitle_shadow_offset = 2131099868;
 			
 			// aapt resource value: 0x7F0600DD
-			public const int tooltip_horizontal_padding = 2131099869;
+			public const int subtitle_shadow_radius = 2131099869;
 			
 			// aapt resource value: 0x7F0600DE
-			public const int tooltip_margin = 2131099870;
+			public const int tooltip_corner_radius = 2131099870;
 			
 			// aapt resource value: 0x7F0600DF
-			public const int tooltip_precise_anchor_extra_offset = 2131099871;
+			public const int tooltip_horizontal_padding = 2131099871;
 			
 			// aapt resource value: 0x7F0600E0
-			public const int tooltip_precise_anchor_threshold = 2131099872;
+			public const int tooltip_margin = 2131099872;
 			
 			// aapt resource value: 0x7F0600E1
-			public const int tooltip_vertical_padding = 2131099873;
+			public const int tooltip_precise_anchor_extra_offset = 2131099873;
 			
 			// aapt resource value: 0x7F0600E2
-			public const int tooltip_y_offset_non_touch = 2131099874;
+			public const int tooltip_precise_anchor_threshold = 2131099874;
 			
 			// aapt resource value: 0x7F0600E3
-			public const int tooltip_y_offset_touch = 2131099875;
+			public const int tooltip_vertical_padding = 2131099875;
+			
+			// aapt resource value: 0x7F0600E4
+			public const int tooltip_y_offset_non_touch = 2131099876;
+			
+			// aapt resource value: 0x7F0600E5
+			public const int tooltip_y_offset_touch = 2131099877;
 			
 			static Dimension()
 			{
@@ -3614,10 +3629,16 @@ namespace RadioPlayer
 			public const int notify_panel_notification_icon_bg = 2131165350;
 			
 			// aapt resource value: 0x7F0700A7
-			public const int tooltip_frame_dark = 2131165351;
+			public const int seek_bar = 2131165351;
 			
 			// aapt resource value: 0x7F0700A8
-			public const int tooltip_frame_light = 2131165352;
+			public const int seek_thumb = 2131165352;
+			
+			// aapt resource value: 0x7F0700A9
+			public const int tooltip_frame_dark = 2131165353;
+			
+			// aapt resource value: 0x7F0700AA
+			public const int tooltip_frame_light = 2131165354;
 			
 			static Drawable()
 			{

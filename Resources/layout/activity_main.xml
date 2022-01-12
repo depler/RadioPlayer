@@ -30,7 +30,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="0dp"
-                android:progress="100"/>
+                android:progress="100"
+                android:progressDrawable="@drawable/seek_bar"
+                android:thumb="@drawable/seek_thumb" />
 
         </androidx.appcompat.widget.Toolbar>
 
